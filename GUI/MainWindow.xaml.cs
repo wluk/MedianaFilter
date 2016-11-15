@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Drawing;
 using System.IO;
+using Service;
 
 namespace GUI
 {
@@ -72,7 +73,8 @@ namespace GUI
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
             if (filterSize != 0)
             {
-                Filtering(colorMatrix, filterSize);
+                var filter = new MedianaFilter();
+                var filtredImage = filter.Start(colorMatrix, filterSize);
             }
             string str = string.Empty;
             for (int dimension = 1; dimension <= colorMatrix.Rank; dimension++)
@@ -98,46 +100,6 @@ namespace GUI
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private byte[,] Filtering(byte[,] image, int sizeFilter)
-        {
-            byte[,] filteredColorMatrix = new byte[,] { };
-            List<byte> colorElements = new List<byte>();
-            int x = sizeFilter;
-            int y = sizeFilter;
 
-            for (int i = 0; i < x; i++)
-            {
-                for (int j = 0; j < y; j++)
-                {
-                    colorElements.Add(image[i, j]);
-                }
-            }
-            var mediana = GetMedian(colorElements);
-            colorElements[colorElements.Count / 2] = mediana;
-
-            return filteredColorMatrix;
-        }
-
-        private byte GetMedian(IEnumerable<byte> source)
-        {
-            byte[] temp = source.ToArray();
-            Array.Sort(temp);
-
-            int count = temp.Length;
-            if (count == 0)
-            {
-                throw new InvalidOperationException("Empty collection");
-            }
-            else if (count % 2 == 0)
-            {
-                byte a = temp[count / 2 - 1];
-                byte b = temp[count / 2];
-                return Convert.ToByte((a + b) / 2);
-            }
-            else
-            {
-                return temp[count / 2];
-            }
-        }
     }
 }

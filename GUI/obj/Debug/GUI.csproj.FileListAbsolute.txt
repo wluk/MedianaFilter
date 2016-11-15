@@ -12,3 +12,5 @@ C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.Properties.
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.exe
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.pdb
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\bin\Debug\Service.dll
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\bin\Debug\Service.pdb

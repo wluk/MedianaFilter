@@ -1,0 +1,5 @@
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\Service\bin\Debug\Service.dll
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\Service\bin\Debug\Service.pdb
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\Service\obj\Debug\Service.dll
+C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\Service\obj\Debug\Service.pdb
