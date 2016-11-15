@@ -8,16 +8,49 @@ namespace Service
 {
     public class MedianaFilter
     {
-        public byte[,] Start(byte[,] image, int sizeFilter)
+        public int FrameFilterSize { get; set; }
+        public byte[,] Image { get; set; }
+
+        public byte[,] AsyncFilter(int countThread)
+        {
+            //Thread t = new Thread(new ParameterizedThreadStart(myMethod));
+            //t.Start (myParameterObject);
+
+            //public Thread StartTheThread(SomeType param1, SomeOtherType param2)
+            //{
+            //    var t = new Thread(() => RealStart(param1, param2));
+            //    t.Start();
+            //    return t;
+            //}
+
+            //private static void RealStart(SomeType param1, SomeOtherType param2)
+            //{
+            //  ...
+            //}
+
+            for (int i = 0; i < countThread; i++)
+            {
+
+            }
+            return Frameing();
+        }
+
+        public byte[,] SyncStart()
+        {
+            return Frameing();
+
+        }
+
+        private byte[,] Frameing()
         {
             byte[,] filteredColorMatrix = new byte[,] { };
             List<byte> colorElements = new List<byte>();
 
-            for (int i = 0; i < sizeFilter; i++)
+            for (int i = 0; i < FrameFilterSize; i++)
             {
-                for (int j = 0; j < sizeFilter; j++)
+                for (int j = 0; j < FrameFilterSize; j++)
                 {
-                    colorElements.Add(image[i, j]);
+                    colorElements.Add(Image[i, j]);
                 }
             }
             var mediana = GetMedian(colorElements);
