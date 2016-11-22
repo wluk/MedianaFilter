@@ -99,5 +99,40 @@ namespace GUI
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void btnMinusSize_Click(object sender, RoutedEventArgs e)
+        {
+            int minusFilterSize = Convert.ToInt32(sizeMatrix.Text)-3;
+            if (minusFilterSize < 3)
+            {
+                sizeMatrix.Text = "3";
+            }
+            else
+            {
+                sizeMatrix.Text = minusFilterSize.ToString();
+            }
+        }
+
+        private void btnPlusSize_Click(object sender, RoutedEventArgs e)
+        {
+            sizeMatrix.Text = (Convert.ToInt32(sizeMatrix.Text) + 3).ToString();
+        }
+
+        private void btnMinusThread_Click(object sender, RoutedEventArgs e)
+        {
+            int minusCountThread = Convert.ToInt32(countThread.Text) - 1;
+            if (minusCountThread < 1)
+            {
+                countThread.Text = "1";
+            }
+            else
+            {
+                countThread.Text = minusCountThread.ToString();
+            }
+        }
+
+        private void btnPlusThread_Click(object sender, RoutedEventArgs e)
+        {
+            countThread.Text = (Convert.ToInt32(countThread.Text) + 1).ToString();
+        }
     }
 }

@@ -4,37 +4,44 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
+        Icon="filter.ico"
         mc:Ignorable="d"
-        Title="Mediana filter" Height="400" Width="800">
+        Title="Mediana filter" MinHeight="400" MinWidth="1000" Width="372" Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.75*" />
         </Grid.ColumnDefinitions>
-        <Image Margin="12,12,16,71" Name="imgBase" 
-        Stretch="Fill" Grid.Column="0" />
 
-        <Image Margin="12,12,16,71" Name="imgFilter" 
-        Stretch="Fill" Grid.Column="1"/>
-
-        <Button Height="23" HorizontalAlignment="Left" 
-        Margin="30,0,0,30" Name="btnLoad" VerticalAlignment="Bottom" 
-        Width="75" Grid.Column="0" Click="btnLoad_Click">_Load</Button>
-
-        <Button Height="23" HorizontalAlignment="Left" 
-        Margin="30,0,0,30" Name="btnFilter" VerticalAlignment="Bottom" 
-        Width="75" Grid.Column="1" Click="btnFilterSeq_Click">_Filtrowanie seq</Button>
-
-        <Button Height="23" HorizontalAlignment="Left" 
-        Margin="130,0,0,30" Name="btnFilterSync" VerticalAlignment="Bottom"
-        Width="75" Grid.Column="1" Click="btnFilterSync_Click">F_iltrowanie sync</Button>
-
-        <Label Name="TimeSeq" Content="Czas seq:" Margin="128,316,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label Name="TimeSync" Content="Czas sync:" Margin="128,338,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <TextBox x:Name="sizeMatrix" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="226,320,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="69" PreviewTextInput="NumberValidationTextBox"/>
-        <TextBox x:Name="countThread" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="309,320,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="77" PreviewTextInput="NumberValidationTextBox"/>
-        <Label x:Name="TimeSeq_Copy" Content="rozmiar filtra" Grid.Column="1" Margin="226,294,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Label x:Name="TimeSync_Copy" Content="ilosc watkow" Grid.Column="1" Margin="309,294,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
+        <Image Margin="10,10,5,10" Name="imgBase" Stretch="Fill" Grid.Column="0"/>
+        <Image Margin="5,10,5,10"  Name="imgFilter" Stretch="Fill" Grid.Column="1"/>
+        <StackPanel Orientation="Vertical" Grid.Column="2" Width="auto" Height="auto" Margin="15,10,0,0" >
+            <Button Height="30" HorizontalAlignment="Left" Margin="0,0,0,0" Name="btnLoad" VerticalAlignment="Center" Width="100" Grid.Column="2" Click="btnLoad_Click">_Wczytaj obraz</Button>
+            <GroupBox x:Name="groupSeq" Header="Filtrowanie sekwencyjne" HorizontalAlignment="Left" Height="89" Margin="0,20,0,0" Grid.Row="1" VerticalAlignment="Top" Width="auto" Grid.Column="2">
+                <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
+                    <Button Height="30" HorizontalAlignment="Left" Margin="0,8,0,0" x:Name="btnFilter" VerticalAlignment="Bottom" Width="75" Click="btnFilterSeq_Click" Content="_Filtruj"/>
+                    <Label x:Name="TimeSeq" Content="Czas wykonywania filtrowania: x.xx ms" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-5,5,0,0"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox x:Name="groupSyn" Header="Filtrowanie współbieżne" HorizontalAlignment="Left" Height="auto" Margin="0,20,0,0" VerticalAlignment="Top" Width="auto">
+                <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
+                    <Label x:Name="SizeCounterLabel" Content="Rozmiar okna próbkującego " Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
+                    <StackPanel Orientation="Horizontal" Width="auto" Height="auto" Margin="10,0,0,0">
+                        <TextBox x:Name="sizeMatrix" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="3" TextAlignment="Center"  VerticalAlignment="Top" Width="25" PreviewTextInput="NumberValidationTextBox"/>
+                        <Button x:Name="btnMinusSize" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusSize_Click"/>
+                        <Button x:Name="btnPlusSize" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusSize_Click"/>
+                    </StackPanel>
+                    <Label x:Name="ThreadCountLabel" Content="Ilosc watkow" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="3" Width="auto" Height="auto" Margin="10,0,0,0">
+                        <TextBox x:Name="countThread" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" PreviewTextInput="NumberValidationTextBox"/>
+                        <Button x:Name="btnMinusThread" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusThread_Click"/>
+                        <Button x:Name="btnPlusThread" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusThread_Click"/>
+                    </StackPanel>
+                    <Button x:Name="btnFilterSync" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Bottom" Width="75" Click="btnFilterSync_Click">F_iltruj</Button>
+                    <Label Name="TimeSync" Content="Czas wykonywania filtrowania: x.xx ms" Margin="-5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
     </Grid>
 </Window>
