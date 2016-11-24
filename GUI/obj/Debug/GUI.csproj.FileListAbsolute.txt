@@ -14,3 +14,19 @@ C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.exe
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\obj\Debug\GUI.pdb
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\bin\Debug\Service.dll
 C:\Users\wilu\Desktop\Filtr medianowy\MedianFilter\GUI\bin\Debug\Service.pdb
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe.config
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.pdb
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\bin\Debug\Service.dll
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\bin\Debug\Service.pdb
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csprojResolveAssemblyReference.cache
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\MainWindow.g.cs
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\App.g.cs
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI_MarkupCompile.cache
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI_MarkupCompile.lref
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\MainWindow.baml
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.g.resources
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.Properties.Resources.resources
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
+C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb

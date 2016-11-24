@@ -134,5 +134,10 @@ namespace GUI
         {
             countThread.Text = (Convert.ToInt32(countThread.Text) + 1).ToString();
         }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
