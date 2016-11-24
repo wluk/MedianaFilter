@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{C5E99D43-5519-4B78-ABD5-B7D7A9DC5E4B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Image", "Image", "{A0B8026F-5544-49E4-9056-2949D2F653E6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{F51A04DE-2663-48AC-B9FC-39968108FF67}"
 	ProjectSection(SolutionItems) = preProject
-		\\netiaspot\a\image_test_1.bmp = \\netiaspot\a\image_test_1.bmp
+		Images\image_test_1.bmp = Images\image_test_1.bmp
 	EndProjectSection
 EndProject
 Global

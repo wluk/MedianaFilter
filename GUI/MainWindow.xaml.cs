@@ -90,7 +90,7 @@ namespace GUI
             var filtredImage = _medianaFilter.AsyncFilter(Convert.ToInt32(countThread.Text));
 
             swSync.Stop();
-            TimeSeq.Content = "Czas filtrowania wielowatkowego " + swSync.ElapsedMilliseconds.ToString() + "ms";
+            TimeSync.Content = "Czas filtrowania wielowatkowego " + swSync.ElapsedMilliseconds.ToString() + "ms";
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
