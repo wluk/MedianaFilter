@@ -32,7 +32,6 @@ namespace GUI
         {
             InitializeComponent();
             colorMatrix = new byte[,] { { 1, 4, 0, 1, 3, 1 }, { 2, 2, 4, 2, 2, 3 }, { 1, 0, 1, 0, 1, 0 }, { 1, 2, 1, 0, 2, 2 }, { 2, 5, 3, 1, 2, 5 }, { 1, 1, 4, 2, 3, 0 } };
-            _medianaFilter = new MedianaFilter();
             _imageConvert = new ImageConvert();
         }
 
@@ -53,6 +52,7 @@ namespace GUI
                 try
                 {
                     _imageConvert.sth();
+                    _medianaFilter = new MedianaFilter(colorMatrix, Convert.ToInt32(sizeMatrix.Text));
                 }
                 catch (Exception)
                 {
@@ -70,7 +70,8 @@ namespace GUI
 
             //start filtering single thread
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
-            var filtredImage = _medianaFilter.SyncStart();
+            
+            var filtredImage = _medianaFilter.SeqStart();
 
             string str = string.Empty;
             for (int dimension = 1; dimension <= colorMatrix.Rank; dimension++)
@@ -86,8 +87,7 @@ namespace GUI
             var swSync = Stopwatch.StartNew();
 
             //start filtering multithreading
-            int thredCount = Convert.ToInt32(countThread.Text);
-            var filtredImage = _medianaFilter.AsyncFilter(thredCount);
+            var filtredImage = _medianaFilter.AsyncFilter(Convert.ToInt32(countThread.Text));
 
             swSync.Stop();
             TimeSeq.Content = "Czas filtrowania wielowatkowego " + swSync.ElapsedMilliseconds.ToString() + "ms";

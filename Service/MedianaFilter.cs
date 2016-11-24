@@ -10,6 +10,22 @@ namespace Service
     {
         public int FrameFilterSize { get; set; }
         public byte[,] Image { get; set; }
+        public int dimensionX
+        {
+            get { return Image.GetLength(0); }
+            set { }
+        }
+        public int dimensionY
+        {
+            get { return Image.GetLength(1); }
+            set { }
+        }
+
+        public MedianaFilter(byte[,] imageMatrix, int filterSize)
+        {
+            Image = imageMatrix;
+            FrameFilterSize = filterSize;
+        }
 
         public byte[,] AsyncFilter(int countThread)
         {
@@ -27,34 +43,42 @@ namespace Service
             //{
             //  ...
             //}
-
             for (int i = 0; i < countThread; i++)
             {
+
+
+
 
             }
             return Frameing();
         }
 
-        public byte[,] SyncStart()
+        public byte[,] SeqStart()
         {
             return Frameing();
-
+            //
         }
 
         private byte[,] Frameing()
         {
-            byte[,] filteredColorMatrix = new byte[,] { };
+            byte[,] filteredColorMatrix = Image;
             List<byte> colorElements = new List<byte>();
 
-            for (int i = 0; i < FrameFilterSize; i++)
+            for (int i = 0; i < dimensionX; i++)
             {
-                for (int j = 0; j < FrameFilterSize; j++)
+                for (int j = 0; j < dimensionY; j++)
                 {
                     colorElements.Add(Image[i, j]);
+                    if ((i + 1) % FrameFilterSize == 0 && (j + 1) % FrameFilterSize == 0 && i != 0 && j != 00 && i == j)
+                    {
+                        var mediana = GetMedian(colorElements);
+                        colorElements.Clear();
+                        int a = i - 1;
+                        int b = j - 1;
+                        filteredColorMatrix[a, b] = mediana;
+                    }
                 }
             }
-            var mediana = GetMedian(colorElements);
-            colorElements[colorElements.Count / 2] = mediana;
 
             return filteredColorMatrix;
         }
