@@ -31,8 +31,6 @@ C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csproj.GenerateResou
 C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
 C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe.config
-C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
-C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.pdb
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Service.dll
@@ -46,3 +44,5 @@ C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\MainWindow.baml
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.g.resources
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.Properties.Resources.resources
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb

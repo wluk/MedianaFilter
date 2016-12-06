@@ -1,0 +1,8 @@
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\bin\Debug\PrintMatrix.exe.config
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\bin\Debug\PrintMatrix.exe
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\bin\Debug\PrintMatrix.pdb
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\bin\Debug\Service.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\bin\Debug\Service.pdb
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\obj\Debug\HelperPrintMatrix.csprojResolveAssemblyReference.cache
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\obj\Debug\PrintMatrix.exe
+C:\Users\wilu\Source\Repos\MedianaFilter\PrintMatrix\obj\Debug\PrintMatrix.pdb

@@ -8,13 +8,33 @@ namespace Service
 {
     public class MedianaFilter
     {
+        /// <summary>
+        /// Rozmiar ramki filtrującej
+        /// </summary>
         public int FrameFilterSize { get; set; }
+        /// <summary>
+        /// Obraz do filtracji
+        /// </summary>
         public byte[,] Image { get; set; }
+        /// <summary>
+        /// Macierz z medianami
+        /// </summary>
+        public byte[,] MedianaMatrix { get; set; }
+        /// <summary>
+        /// Obraz wynikowy
+        /// </summary>
+        public byte[,] ProcessedImage { get; set; }
+        /// <summary>
+        /// Wymiar macierzy obrazu do filtrowania
+        /// </summary>
         public int dimensionX
         {
             get { return Image.GetLength(0); }
             set { }
         }
+        /// <summary>
+        /// Wymiar macierzy obrazu do filtrowania
+        /// </summary>
         public int dimensionY
         {
             get { return Image.GetLength(1); }
@@ -25,6 +45,8 @@ namespace Service
         {
             Image = imageMatrix;
             FrameFilterSize = filterSize;
+            MedianaMatrix = new byte[dimensionX, dimensionY];
+            ProcessedImage = imageMatrix;
         }
 
         public byte[,] AsyncFilter(int countThread)
@@ -50,40 +72,71 @@ namespace Service
 
 
             }
-            return Frameing();
+            Frameing(0, 0, FrameFilterSize, FrameFilterSize);
+            return MedianaMatrix;
         }
 
+        /// <summary>
+        /// Filtrowanie sekwencyjne
+        /// </summary>
+        /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego</returns>
         public byte[,] SeqStart()
         {
-            return Frameing();
-            //
-        }
-
-        private byte[,] Frameing()
-        {
-            byte[,] filteredColorMatrix = Image;
-            List<byte> colorElements = new List<byte>();
-
+            //Utworzenie macierzy z median dla zadanej macierzy obrazu
             for (int i = 0; i < dimensionX; i++)
             {
                 for (int j = 0; j < dimensionY; j++)
                 {
-                    colorElements.Add(Image[i, j]);
-                    if ((i + 1) % FrameFilterSize == 0 && (j + 1) % FrameFilterSize == 0 && i != 0 && j != 00 && i == j)
+                    //Ograniczenie końca macierzy obrazu
+                    if (j <= dimensionY - FrameFilterSize && i <= dimensionX - FrameFilterSize)
                     {
-                        var mediana = GetMedian(colorElements);
-                        colorElements.Clear();
-                        int a = i - 1;
-                        int b = j - 1;
-                        filteredColorMatrix[a, b] = mediana;
+                        Frameing(i, j, i + (FrameFilterSize - FrameFilterSize / 2), j + (FrameFilterSize - FrameFilterSize / 2));
                     }
                 }
             }
 
-            return filteredColorMatrix;
+            //Naniesienie macierzy medianowej na obraz
+            for (int i = 1; i < dimensionX - 1; i++)
+            {
+                for (int j = 1; j < dimensionY - 1; j++)
+                {
+                    ProcessedImage[i, j] = MedianaMatrix[i, j];
+                }
+            }
+
+            return ProcessedImage;
         }
 
-        private byte GetMedian(IEnumerable<byte> source)
+        /// <summary>
+        /// Filtrowanie klatkowe
+        /// </summary>
+        /// <param name="startX">Pozycja startowa X</param>
+        /// <param name="startY">Pozycja startowa Y</param>
+        /// <param name="stopX">Pozycja końcowa X</param>
+        /// <param name="stopY">Pozycja końcowa Y</param>
+        private void Frameing(int startX, int startY, int stopX, int stopY)
+        {
+            List<byte> colorElements = new List<byte>();
+
+            for (int i = startX; i <= stopX; i++)
+            {
+                for (int j = startY; j <= stopY; j++)
+                {
+                    colorElements.Add(Image[i, j]);
+                }
+            }
+
+            var mediana = GetMedian(colorElements);
+            int a = (startX + stopX) / 2;
+            int b = (startY + stopY) / 2;
+            MedianaMatrix[a, b] = mediana;
+        }
+        /// <summary>
+        /// Mediana ze zbioru
+        /// </summary>
+        /// <param name="source">Zbiór liczb</param>
+        /// <returns>Liczba będąca medianą z podanego zbioru</returns>
+        public byte GetMedian(IEnumerable<byte> source)
         {
             byte[] temp = source.ToArray();
             Array.Sort(temp);

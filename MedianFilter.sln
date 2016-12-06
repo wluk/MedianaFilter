@@ -12,6 +12,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{F51A04
 		Images\image_test_1.bmp = Images\image_test_1.bmp
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelperPrintMatrix", "PrintMatrix\HelperPrintMatrix.csproj", "{0051D762-E3FE-436B-A3B2-76AC4542F47D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{005E3CB5-F520-4E15-8240-60617C38D76E}"
+	ProjectSection(SolutionItems) = preProject
+		Doc\Image Filtering_2up.pdf = Doc\Image Filtering_2up.pdf
+		Doc\mf2.pdf = Doc\mf2.pdf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +34,10 @@ Global
 		{C5E99D43-5519-4B78-ABD5-B7D7A9DC5E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5E99D43-5519-4B78-ABD5-B7D7A9DC5E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5E99D43-5519-4B78-ABD5-B7D7A9DC5E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0051D762-E3FE-436B-A3B2-76AC4542F47D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0051D762-E3FE-436B-A3B2-76AC4542F47D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0051D762-E3FE-436B-A3B2-76AC4542F47D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0051D762-E3FE-436B-A3B2-76AC4542F47D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

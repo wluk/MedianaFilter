@@ -53,10 +53,13 @@ namespace GUI
                 {
                     _imageConvert.sth();
                     _medianaFilter = new MedianaFilter(colorMatrix, Convert.ToInt32(sizeMatrix.Text));
+                    btnFilter.IsEnabled = true;
+                    btnFilterSync.IsEnabled = true;
                 }
                 catch (Exception)
                 {
-
+                    btnFilter.IsEnabled = false;
+                    btnFilterSync.IsEnabled = false;
                     throw;
                 }
                 
@@ -114,7 +117,7 @@ namespace GUI
 
         private void btnPlusSize_Click(object sender, RoutedEventArgs e)
         {
-            sizeMatrix.Text = (Convert.ToInt32(sizeMatrix.Text) + 3).ToString();
+            sizeMatrix.Text = (Convert.ToInt32(sizeMatrix.Text) + 2).ToString();
         }
 
         private void btnMinusThread_Click(object sender, RoutedEventArgs e)
