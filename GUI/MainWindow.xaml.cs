@@ -17,13 +17,14 @@ using System.Windows.Shapes;
 using System.Drawing;
 using System.IO;
 using Service;
+using MahApps.Metro.Controls;
 
 namespace GUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
         private byte[,] colorMatrix;
         private MedianaFilter _medianaFilter;
