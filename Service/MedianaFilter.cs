@@ -15,15 +15,15 @@ namespace Service
         /// <summary>
         /// Obraz do filtracji
         /// </summary>
-        public byte[,] Image { get; set; }
+        public double[,] Image { get; set; }
         /// <summary>
         /// Macierz z medianami
         /// </summary>
-        public byte[,] MedianaMatrix { get; set; }
+        public double[,] MedianaMatrix { get; set; }
         /// <summary>
         /// Obraz wynikowy
         /// </summary>
-        public byte[,] ProcessedImage { get; set; }
+        public double[,] ProcessedImage { get; set; }
         /// <summary>
         /// Wymiar macierzy obrazu do filtrowania
         /// </summary>
@@ -41,15 +41,15 @@ namespace Service
             set { }
         }
 
-        public MedianaFilter(byte[,] imageMatrix, int filterSize)
+        public MedianaFilter(double[,] imageMatrix, int filterSize)
         {
             Image = imageMatrix;
             FrameFilterSize = filterSize;
-            MedianaMatrix = new byte[dimensionX, dimensionY];
+            MedianaMatrix = new double[dimensionX, dimensionY];
             ProcessedImage = imageMatrix;
         }
 
-        public byte[,] AsyncFilter(int countThread)
+        public double[,] AsyncFilter(int countThread)
         {
             //Thread t = new Thread(new ParameterizedThreadStart(myMethod));
             //t.Start (myParameterObject);
@@ -80,7 +80,7 @@ namespace Service
         /// Filtrowanie sekwencyjne
         /// </summary>
         /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego</returns>
-        public byte[,] SeqStart()
+        public double[,] SeqStart()
         {
             //Utworzenie macierzy z median dla zadanej macierzy obrazu
             for (int i = 0; i < dimensionX; i++)
@@ -116,7 +116,7 @@ namespace Service
         /// <param name="stopY">Pozycja końcowa Y</param>
         private void Frameing(int startX, int startY, int stopX, int stopY)
         {
-            List<byte> colorElements = new List<byte>();
+            List<double> colorElements = new List<double>();
 
             for (int i = startX; i <= stopX; i++)
             {
@@ -136,9 +136,9 @@ namespace Service
         /// </summary>
         /// <param name="source">Zbiór liczb</param>
         /// <returns>Liczba będąca medianą z podanego zbioru</returns>
-        public byte GetMedian(IEnumerable<byte> source)
+        public double GetMedian(IEnumerable<double> source)
         {
-            byte[] temp = source.ToArray();
+            double[] temp = source.ToArray();
             Array.Sort(temp);
 
             int count = temp.Length;
@@ -148,9 +148,9 @@ namespace Service
             }
             else if (count % 2 == 0)
             {
-                byte a = temp[count / 2 - 1];
-                byte b = temp[count / 2];
-                return Convert.ToByte((a + b) / 2);
+                double a = temp[count / 2 - 1];
+                double b = temp[count / 2];
+                return Convert.ToDouble((a + b) / 2);
             }
             else
             {

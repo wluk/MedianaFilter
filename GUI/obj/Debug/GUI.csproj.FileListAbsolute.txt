@@ -50,3 +50,15 @@ C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.Properties.Resources.
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI_Content.g.cs
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.dll.config
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Imaging.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Math.Core.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Math.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Statistics.dll
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.xml
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Imaging.xml
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Math.xml
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Math.Core.xml
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.Statistics.xml

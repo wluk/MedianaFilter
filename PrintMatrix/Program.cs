@@ -24,16 +24,16 @@ namespace PrintMatrix
         {
             Console.Write("Podaj wielkosc filtra: ");
             int sizeMatrix = Convert.ToInt32(Console.ReadLine());
-            MedianaFilter medianaFilter = new MedianaFilter(colorMatrix, Convert.ToInt32(sizeMatrix));
-            var a = medianaFilter.SeqStart();
+            //MedianaFilter medianaFilter = new MedianaFilter(colorMatrix, Convert.ToInt32(sizeMatrix));
+            //var a = medianaFilter.SeqStart();
 
             Console.Clear();
             Console.WriteLine("Macierz wejsciowa");
             PrintMatrix(colorMatrix);
             Console.WriteLine("\nMacierz z medianami");
-            PrintMatrix(medianaFilter.MedianaMatrix);
+            //PrintMatrix(medianaFilter.MedianaMatrix);
             Console.WriteLine("\nMacierz wynikowa");
-            PrintMatrix(a);
+            //PrintMatrix(a);
 
             Console.ReadLine();
         }

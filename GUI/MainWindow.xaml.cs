@@ -18,6 +18,9 @@ using System.Drawing;
 using System.IO;
 using Service;
 using MahApps.Metro.Controls;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using Accord.Imaging.Converters;
 
 namespace GUI
 {
@@ -26,13 +29,14 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private byte[,] colorMatrix;
+        private double[,] colorMatrix;
         private MedianaFilter _medianaFilter;
         private ImageConvert _imageConvert;
+        private BitmapImage InputImage;
         public MainWindow()
         {
             InitializeComponent();
-            colorMatrix = new byte[,] { { 1, 4, 0, 1, 3, 1 }, { 2, 2, 4, 2, 2, 3 }, { 1, 0, 1, 0, 1, 0 }, { 1, 2, 1, 0, 2, 2 }, { 2, 5, 3, 1, 2, 5 }, { 1, 1, 4, 2, 3, 0 } };
+            colorMatrix = new double[,] { { 1, 4, 0, 1, 3, 1 }, { 2, 2, 4, 2, 2, 3 }, { 1, 0, 1, 0, 1, 0 }, { 1, 2, 1, 0, 2, 2 }, { 2, 5, 3, 1, 2, 5 }, { 1, 1, 4, 2, 3, 0 } };
             _imageConvert = new ImageConvert();
         }
 
@@ -45,27 +49,181 @@ namespace GUI
               "Portable Network Graphic (*.png)|*.png";
             if (op.ShowDialog() == true)
             {
-                var b1 = new BitmapImage(new Uri(op.FileName));
-                var b2 = new BitmapImage(new Uri(op.FileName));
-                imgBase.Source = b1;
-                imgFilter.Source = b2;
+                InputImage = new BitmapImage(new Uri(op.FileName));
+                imgBase.Source = InputImage;
 
                 try
                 {
                     _imageConvert.sth();
-                    _medianaFilter = new MedianaFilter(colorMatrix, Convert.ToInt32(sizeMatrix.Text));
+
+                    //var imagesss = _medianaFilter.SeqStart();
                     btnFilter.IsEnabled = true;
-                    btnFilterSync.IsEnabled = true;
+                    btnFilterSync.IsEnabled = true;  
+                    //
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     btnFilter.IsEnabled = false;
                     btnFilterSync.IsEnabled = false;
                     throw;
                 }
-                
+
             }
 
+
+        }
+
+        public byte[,] function(Bitmap image)
+        {
+            byte[] arr1D;
+
+            BitmapData data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadOnly, image.PixelFormat);
+            try
+            {
+                IntPtr ptr = data.Scan0;
+                int bytes = Math.Abs(data.Stride) * image.Height;
+                byte[] rgbValues = new byte[bytes];
+                arr1D = rgbValues;
+                Marshal.Copy(ptr, rgbValues, 0, bytes);
+            }
+            finally
+            {
+                image.UnlockBits(data);
+            }
+            var b1 = ConvertArray(arr1D, image.Width);
+            return b1;
+        }
+
+        //
+        private unsafe Bitmap ToBitmap(double[,] rawImage)
+        {
+            int width = rawImage.GetLength(1);
+            int height = rawImage.GetLength(0);
+
+            Bitmap Image = new Bitmap(width, height);
+            BitmapData bitmapData = Image.LockBits(
+                new System.Drawing.Rectangle(0, 0, width, height),
+                ImageLockMode.ReadWrite,
+                PixelFormat.Format32bppArgb
+            );
+            ColorARGB* startingPosition = (ColorARGB*)bitmapData.Scan0;
+
+
+            for (int i = 0; i < height; i++)
+                for (int j = 0; j < width; j++)
+                {
+                    double color = rawImage[i, j];
+                    byte rgb = (byte)(color * 255);
+
+                    ColorARGB* position = startingPosition + j + i * width;
+                    position->A = 255;
+                    position->R = rgb;
+                    position->G = rgb;
+                    position->B = rgb;
+                }
+
+            Image.UnlockBits(bitmapData);
+            return Image;
+        }
+
+        public struct ColorARGB
+        {
+            public byte B;
+            public byte G;
+            public byte R;
+            public byte A;
+
+            public ColorARGB(Color color)
+            {
+                A = color.A;
+                R = color.R;
+                G = color.G;
+                B = color.B;
+            }
+
+            public ColorARGB(byte a, byte r, byte g, byte b)
+            {
+                A = a;
+                R = r;
+                G = g;
+                B = b;
+            }
+
+            public Color ToColor()
+            {
+                return Color.FromArgb(A, R, G, B);
+            }
+        }
+        //
+
+        public byte[,] ConvertArray(byte[] Input, int size)
+        {
+            byte[,] Output = new byte[(byte)(Input.Length / size), size];
+            for (int i = 0; i < Input.Length; i += size)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    Output[(int)(i / size), j] = Input[i + j];
+                }
+            }
+            return Output;
+        }
+
+
+        private Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        {
+            // BitmapImage bitmapImage = new BitmapImage(new Uri("../Images/test.png", UriKind.Relative));
+
+            using (MemoryStream outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+                enc.Save(outStream);
+                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+
+                return new Bitmap(bitmap);
+            }
+        }
+
+        public int[,] Array2D(Bitmap bitmap)
+        {
+            int[,] imgary = new int[bitmap.Width, bitmap.Height];
+
+            int x, y;
+
+            for (x = 0; x < bitmap.Width; x++)
+            {
+                for (y = 0; y < bitmap.Height; y++)
+                {
+                    //imgary[x, y] = bitmap.GetPixel(x, y);
+                }
+            }
+            return imgary;
+        }
+
+        public BitmapImage ImageFromBuffer(Byte[] bytes)
+        {
+            MemoryStream stream = new MemoryStream(bytes);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = stream;
+            image.EndInit();
+            return image;
+        }
+
+        public Byte[] BufferFromImage(BitmapImage imageSource)
+        {
+            Stream stream = imageSource.StreamSource;
+            Byte[] buffer = null;
+            if (stream != null && stream.Length > 0)
+            {
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    buffer = br.ReadBytes((Int32)stream.Length);
+                }
+            }
+
+            return buffer;
         }
 
         private void btnFilterSeq_Click(object sender, RoutedEventArgs e)
@@ -74,8 +232,29 @@ namespace GUI
 
             //start filtering single thread
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
-            
-            var filtredImage = _medianaFilter.SeqStart();
+
+            //
+            //img to array
+            var a1 = BitmapImage2Bitmap(InputImage);
+            ImageToMatrix conv = new ImageToMatrix(min: 0, max: 1);
+            double[,] matrix;
+            conv.Convert(a1, out matrix);
+            _medianaFilter = new MedianaFilter(matrix, filterSize);
+            var a8 = _medianaFilter.SeqStart();
+            var a9 = ToBitmap(a8);
+            BitmapImage bitmapImage = new BitmapImage();
+            using (MemoryStream memory = new MemoryStream())
+            {
+                a9.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+            }
+            imgFilter.Source = bitmapImage;
+            //
 
             string str = string.Empty;
             for (int dimension = 1; dimension <= colorMatrix.Rank; dimension++)
@@ -105,7 +284,7 @@ namespace GUI
 
         private void btnMinusSize_Click(object sender, RoutedEventArgs e)
         {
-            int minusFilterSize = Convert.ToInt32(sizeMatrix.Text)-3;
+            int minusFilterSize = Convert.ToInt32(sizeMatrix.Text) - 3;
             if (minusFilterSize < 3)
             {
                 sizeMatrix.Text = "3";
