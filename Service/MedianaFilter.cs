@@ -41,47 +41,54 @@ namespace Service
             set { }
         }
 
-        public MedianaFilter(double[,] imageMatrix, int filterSize)
+        public MedianaFilter(double[,] imageMatrix)
         {
-            Image = imageMatrix;
-            FrameFilterSize = filterSize;
+            Image = imageMatrix;            
             MedianaMatrix = new double[dimensionX, dimensionY];
             ProcessedImage = imageMatrix;
         }
 
-        public double[,] AsyncFilter(int countThread)
+        /// <summary>
+        /// Filtrowanie na wątkach
+        /// </summary>
+        /// <param name="countThread">Liczba wątków</param>
+        /// <param name="filterSize">Rozmiar kratki filtrującej</param>
+        /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego na wątkach</returns>
+        public double[,] AsyncFilter(int countThread, int filterSize)
         {
-            //Thread t = new Thread(new ParameterizedThreadStart(myMethod));
-            //t.Start (myParameterObject);
-
-            //public Thread StartTheThread(SomeType param1, SomeOtherType param2)
-            //{
-            //    var t = new Thread(() => RealStart(param1, param2));
-            //    t.Start();
-            //    return t;
-            //}
-
-            //private static void RealStart(SomeType param1, SomeOtherType param2)
-            //{
-            //  ...
-            //}
-            for (int i = 0; i < countThread; i++)
+            FrameFilterSize = filterSize;
+            //Utworzenie macierzy z median dla zadanej macierzy obrazu
+            for (int i = 0; i < dimensionX; i++)
             {
-
-
-
-
+                for (int j = 0; j < dimensionY; j++)
+                {
+                    //Ograniczenie końca macierzy obrazu
+                    if (j <= dimensionY - FrameFilterSize && i <= dimensionX - FrameFilterSize)
+                    {
+                        Frameing(i, j, i + (FrameFilterSize - FrameFilterSize / 2), j + (FrameFilterSize - FrameFilterSize / 2));
+                    }
+                }
             }
-            Frameing(0, 0, FrameFilterSize, FrameFilterSize);
-            return MedianaMatrix;
+
+            //Naniesienie macierzy medianowej na obraz
+            for (int i = 1; i < dimensionX - 1; i++)
+            {
+                for (int j = 1; j < dimensionY - 1; j++)
+                {
+                    ProcessedImage[i, j] = MedianaMatrix[i, j];
+                }
+            }
+
+            return ProcessedImage;
         }
 
         /// <summary>
         /// Filtrowanie sekwencyjne
         /// </summary>
         /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego</returns>
-        public double[,] SeqStart()
+        public double[,] SeqStart(int filterSize)
         {
+            FrameFilterSize = filterSize;
             //Utworzenie macierzy z median dla zadanej macierzy obrazu
             for (int i = 0; i < dimensionX; i++)
             {
