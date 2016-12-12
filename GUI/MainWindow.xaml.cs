@@ -73,20 +73,18 @@ namespace GUI
 
             try
             {
-                //BitmapImage to bitmap
-                var bitmaapImage = _imageConvert.BitmapImageToBitmap(inputImage);
-                //Bitmap to array
-                var ImageMatrix = _imageConvert.BitmapToArray(bitmaapImage);
-                //Inicjalizacja metody filtrowania
+                //Image to array
+                var ImageMatrix = _imageConvert.GetPixelArray(inputImage.UriSource.LocalPath);
+
                 _medianaFilter = new MedianaFilter(ImageMatrix);
+
                 //Odfiltrowanie obrazu
                 var filteredArrayImage = _medianaFilter.SeqStart(filterSize);
-                //Array to bitmap
-                var bitmapFilteredImage = _imageConvert.ArrayToBitmap(filteredArrayImage);
-                //Bitmap to BitmapImage
-                var filteredImage = _imageConvert.BitmapToBitmapImage(bitmapFilteredImage);
 
-                //filteredImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                //Array to image
+                var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
+
+                
                 imgFilter.Source = filteredImage;
             }
             catch (Exception ex)
@@ -105,21 +103,21 @@ namespace GUI
 
             try
             {
-                //BitmapImage to bitmap
-                var bitmaapImage = _imageConvert.BitmapImageToBitmap(inputImage);
-                //Bitmap to array
-                var ImageMatrix = _imageConvert.BitmapToArray(bitmaapImage);
-                //Inicjalizacja metody filtrowania
-                _medianaFilter = new MedianaFilter(ImageMatrix);
-                //Odfiltrowanie obrazu
-                var filteredArrayImage = _medianaFilter.SeqStart(filterSize);
-                //Array to bitmap
-                var bitmapFilteredImage = _imageConvert.ArrayToBitmap(filteredArrayImage);
-                //Bitmap to BitmapImage
-                var filteredImage = _imageConvert.BitmapToBitmapImage(bitmapFilteredImage);
+                ////BitmapImage to bitmap
+                //var bitmaapImage = _imageConvert.BitmapImageToBitmap(inputImage);
+                ////Bitmap to array
+                //var ImageMatrix = _imageConvert.BitmapToArray(bitmaapImage);
+                ////Inicjalizacja metody filtrowania
+                //_medianaFilter = new MedianaFilter(ImageMatrix);
+                ////Odfiltrowanie obrazu
+                //var filteredArrayImage = _medianaFilter.SeqStart(filterSize);
+                ////Array to bitmap
+                //var bitmapFilteredImage = _imageConvert.ArrayToBitmap(filteredArrayImage);
+                ////Bitmap to BitmapImage
+                //var filteredImage = _imageConvert.BitmapToBitmapImage(bitmapFilteredImage);
 
-                //filteredImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                imgFilter.Source = filteredImage;
+                ////filteredImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                //imgFilter.Source = filteredImage;
             }
             catch (Exception ex)
             {

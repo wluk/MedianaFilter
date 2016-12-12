@@ -20,6 +20,5 @@ C:\Users\wilu\Source\Repos\MedianaFilter\Service\bin\Debug\Accord.Imaging.xml
 C:\Users\wilu\Source\Repos\MedianaFilter\Service\bin\Debug\Accord.Math.xml
 C:\Users\wilu\Source\Repos\MedianaFilter\Service\bin\Debug\Accord.Math.Core.xml
 C:\Users\wilu\Source\Repos\MedianaFilter\Service\bin\Debug\Accord.Statistics.xml
-C:\Users\wilu\Source\Repos\MedianaFilter\Service\obj\Debug\Service.csprojResolveAssemblyReference.cache
 C:\Users\wilu\Source\Repos\MedianaFilter\Service\obj\Debug\Service.dll
 C:\Users\wilu\Source\Repos\MedianaFilter\Service\obj\Debug\Service.pdb
