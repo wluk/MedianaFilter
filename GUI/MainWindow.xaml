@@ -16,40 +16,67 @@ ShowTitleBar="True"
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
         <Image Margin="10,10,5,10" Name="imgBase" Stretch="Fill" Grid.Column="0"/>
         <Image Margin="5,10,5,10"  Name="imgFilter" Stretch="Fill" Grid.Column="1"/>
         <GroupBox x:Name="groupFilter" Header="Filtr medianowy" HorizontalAlignment="Left" Height="auto" Margin="5,20,10,0" Grid.Row="1" VerticalAlignment="Top" Width="auto" Grid.Column="2" FontWeight="Bold">
-            <StackPanel Orientation="Vertical" Grid.Column="2" Width="auto" Height="auto" Margin="10,15,10,15" >
-                <Button Height="30" HorizontalAlignment="Left" Margin="0,0,0,0" Name="btnLoad" VerticalAlignment="Center" Width="100" Grid.Column="2" Click="btnLoad_Click">_Wczytaj obraz</Button>
-                <Label x:Name="SizeCounterLabel" Content="Rozmiar okna próbkującego " Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
-                <StackPanel Orientation="Horizontal" Width="auto" Height="auto" Margin="0,0,0,0">
-                    <TextBox x:Name="sizeMatrix" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="3" TextAlignment="Center"  VerticalAlignment="Top" Width="35" PreviewTextInput="NumberValidationTextBox"/>
-                    <Button x:Name="btnMinusSize" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusSize_Click"/>
-                    <Button x:Name="btnPlusSize" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusSize_Click"/>
-                </StackPanel>
-                <GroupBox x:Name="groupSeq" Header="Filtrowanie sekwencyjne" HorizontalAlignment="Left" Height="auto" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="260" Grid.Column="2">
-                    <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
-                        <Button Height="30" HorizontalAlignment="Left" Margin="0,8,0,0" x:Name="btnFilter" VerticalAlignment="Bottom" Width="75" Click="btnFilterSeq_Click" Content="_Filtruj" IsEnabled="False"/>
-                        <Label x:Name="TimeSeq" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-5,5,0,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Column="0" Width="auto" Height="auto" Margin="10,15,10,15" >
+                    <Button Height="30" HorizontalAlignment="Left" Margin="0,0,0,0" Name="btnLoad" VerticalAlignment="Center" Width="100" Grid.Column="2" Click="btnLoad_Click">_Wczytaj obraz</Button>
+                    <Label x:Name="SizeCounterLabel" Content="Rozmiar okna próbkującego " Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"/>
+                    <StackPanel Orientation="Horizontal" Width="auto" Height="auto" Margin="0,0,0,0">
+                        <TextBox x:Name="sizeMatrix" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="3" TextAlignment="Center"  VerticalAlignment="Top" Width="35" PreviewTextInput="NumberValidationTextBox">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <Button x:Name="btnMinusSize" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusSize_Click" Controls:ButtonHelper.CornerRadius="5"/>
+                        <Button x:Name="btnPlusSize" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusSize_Click" Controls:ButtonHelper.CornerRadius="20"/>
                     </StackPanel>
-                </GroupBox>
-                <GroupBox x:Name="groupSyn" Header="Filtrowanie współbieżne" HorizontalAlignment="Left" Height="auto" Margin="0,20,0,0" VerticalAlignment="Top" Width="260">
-                    <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
-                        <Label x:Name="ThreadCountLabel" Content="Ilosc watkow" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2"/>
-                        <StackPanel Orientation="Horizontal" Grid.Row="3" Width="auto" Height="auto" Margin="0,0,0,0">
-                            <TextBox x:Name="countThread" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="25" PreviewTextInput="NumberValidationTextBox"/>
-                            <Button x:Name="btnMinusThread" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusThread_Click"/>
-                            <Button x:Name="btnPlusThread" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusThread_Click"/>
+                    <GroupBox x:Name="groupSeq" Header="Filtrowanie sekwencyjne" HorizontalAlignment="Left" Height="auto" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="260" Grid.Column="2">
+                        <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
+                            <Button Height="30" HorizontalAlignment="Left" Margin="0,8,0,0" x:Name="btnFilter" VerticalAlignment="Bottom" Width="75" Click="btnFilterSeq_Click" Content="_Filtruj" IsEnabled="False"/>
+                            <Label x:Name="TimeSeq" Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-5,5,0,0"/>
                         </StackPanel>
-                        <Button x:Name="btnFilterSync" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Bottom" Width="75" Click="btnFilterSync_Click" IsEnabled="False">F_iltruj</Button>
-                        <Label Name="TimeSync" Content="" Margin="-5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="auto"/>
-                    </StackPanel>
-                </GroupBox>
-                <Button Height="30" HorizontalAlignment="Left" Margin="0,20,0,0" Name="btnCloce" VerticalAlignment="Center" Width="100" Grid.Column="2" Click="btnClose_Click">_Zamknij</Button>
-            </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="groupSyn" Header="Filtrowanie współbieżne" HorizontalAlignment="Left" Height="auto" Margin="0,20,0,0" VerticalAlignment="Top" Width="260">
+                        <StackPanel Orientation="Vertical" Width="auto" Height="auto" Margin="10,0,0,0">
+                            <Label x:Name="ThreadCountLabel" Content="Ilosc watkow" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2"/>
+                            <StackPanel Orientation="Horizontal" Grid.Row="3" Width="auto" Height="auto" Margin="0,0,0,0">
+                                <TextBox x:Name="countThread" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" TextWrapping="Wrap" Text="2" TextAlignment="Center" VerticalAlignment="Top" Width="35" PreviewTextInput="NumberValidationTextBox">
+                                    <TextBox.Resources>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </TextBox.Resources>
+                                </TextBox>
+                                <Button x:Name="btnMinusThread" Content="-" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnMinusThread_Click" Controls:ButtonHelper.CornerRadius="5"/>
+                                <Button x:Name="btnPlusThread" Content="+" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="20" Height="25" Click="btnPlusThread_Click" Controls:ButtonHelper.CornerRadius="5"/>
+                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="btnFilterSync" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Center" Width="75" Click="btnFilterSync_Click" IsEnabled="False" Grid.Column="0">F_iltruj</Button>
+                                <Button x:Name="btnShowDiv" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Center" Width="75" Click="btnShowDiv_Click" IsEnabled="False" Grid.Column="1">P_odział</Button>
+                            </Grid>
+                            <Label Name="TimeSync" Content="" Margin="-5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="auto"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <Button Height="30" HorizontalAlignment="Left" Margin="0,20,0,0" Name="btnCloce" VerticalAlignment="Center" Width="100" Grid.Column="2" Click="btnClose_Click">_Zamknij</Button>
+                </StackPanel>
+                <ProgressBar x:Name="OneThread" HorizontalAlignment="Left" VerticalAlignment="Top" Width="35" Height="400" Grid.Column="1" Orientation="Vertical" Visibility="Hidden"/>
+                <ProgressBar x:Name="MultiThread" HorizontalAlignment="Right" VerticalAlignment="Top" Width="35" Height="400" Grid.Column="1" Orientation="Vertical" Visibility="Hidden"/>
+            </Grid>
         </GroupBox>
     </Grid>
 </Controls:MetroWindow>

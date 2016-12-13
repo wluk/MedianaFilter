@@ -32,11 +32,15 @@ namespace GUI
         private MedianaFilter _medianaFilter;
         private ImageConvert _imageConvert;
         BitmapImage inputImage;
+        public int OneThredCount { get; set; }
+        public int MultiThreadCount { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
             _imageConvert = new ImageConvert();
+            OneThredCount = 0;
+            MultiThreadCount = 0;
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -56,12 +60,14 @@ namespace GUI
 
                     btnFilter.IsEnabled = true;
                     btnFilterSync.IsEnabled = true;
+                    btnShowDiv.IsEnabled = true;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
                     btnFilter.IsEnabled = false;
                     btnFilterSync.IsEnabled = false;
+                    btnShowDiv.IsEnabled = false;
                 }
             }
         }
@@ -79,12 +85,12 @@ namespace GUI
                 _medianaFilter = new MedianaFilter(ImageMatrix);
 
                 //Odfiltrowanie obrazu
-                var filteredArrayImage = _medianaFilter.SeqStart(filterSize);
+                var filteredArrayImage = _medianaFilter.SequenceFiltration(filterSize);
 
                 //Array to image
                 var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
 
-                
+
                 imgFilter.Source = filteredImage;
             }
             catch (Exception ex)
@@ -93,31 +99,32 @@ namespace GUI
             }
 
             swSeq.Stop();
+            OneThredCount = (int)swSeq.ElapsedMilliseconds;
             TimeSeq.Content = "Czas filtrowania sekwencyjnego " + swSeq.ElapsedMilliseconds.ToString() + "ms";
+            ProgresCheck();
         }
 
         private void btnFilterSync_Click(object sender, RoutedEventArgs e)
         {
             var swSync = Stopwatch.StartNew();
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
+            int threadCount = Convert.ToInt32(countThread.Text);
 
             try
             {
-                ////BitmapImage to bitmap
-                //var bitmaapImage = _imageConvert.BitmapImageToBitmap(inputImage);
-                ////Bitmap to array
-                //var ImageMatrix = _imageConvert.BitmapToArray(bitmaapImage);
-                ////Inicjalizacja metody filtrowania
-                //_medianaFilter = new MedianaFilter(ImageMatrix);
-                ////Odfiltrowanie obrazu
-                //var filteredArrayImage = _medianaFilter.SeqStart(filterSize);
-                ////Array to bitmap
-                //var bitmapFilteredImage = _imageConvert.ArrayToBitmap(filteredArrayImage);
-                ////Bitmap to BitmapImage
-                //var filteredImage = _imageConvert.BitmapToBitmapImage(bitmapFilteredImage);
+                //Image to array
+                var ImageMatrix = _imageConvert.GetPixelArray(inputImage.UriSource.LocalPath);
 
-                ////filteredImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                //imgFilter.Source = filteredImage;
+                _medianaFilter = new MedianaFilter(ImageMatrix);
+
+                //Odfiltrowanie obrazu
+                var filteredArrayImage = _medianaFilter.AsyncFilter(threadCount, filterSize);
+
+                //Array to image
+                var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
+
+
+                imgFilter.Source = filteredImage;
             }
             catch (Exception ex)
             {
@@ -125,7 +132,9 @@ namespace GUI
             }
 
             swSync.Stop();
+            MultiThreadCount = (int)swSync.ElapsedMilliseconds;
             TimeSync.Content = "Czas filtrowania wielowatkowego " + swSync.ElapsedMilliseconds.ToString() + "ms";
+            ProgresCheck();
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -173,6 +182,56 @@ namespace GUI
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void btnShowDiv_Click(object sender, RoutedEventArgs e)
+        {
+            int filterSize = Convert.ToInt32(sizeMatrix.Text);
+            int threadCount = Convert.ToInt32(countThread.Text);
+
+            try
+            {
+                //Image to array
+                var ImageMatrix = _imageConvert.GetPixelArray(inputImage.UriSource.LocalPath);
+
+                _medianaFilter = new MedianaFilter(ImageMatrix);
+
+                //Odfiltrowanie obrazu
+                var filteredArrayImage = _medianaFilter.FilterShow(threadCount, filterSize);
+
+                //Array to image
+                var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
+
+
+                imgFilter.Source = filteredImage;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ProgresCheck()
+        {
+            if (OneThredCount != 0 && MultiThreadCount != 0)
+            {
+                OneThread.Visibility = Visibility.Visible;
+                MultiThread.Visibility = Visibility.Visible;
+
+                if (OneThredCount > MultiThreadCount)
+                {
+                    OneThread.Maximum = OneThredCount;
+                    MultiThread.Maximum = OneThredCount;
+                }
+                else
+                {
+                    OneThread.Maximum = MultiThreadCount;
+                    MultiThread.Maximum = MultiThreadCount;
+                }
+
+                OneThread.Value = OneThredCount;
+                MultiThread.Value = MultiThreadCount;
+            }
         }
     }
 }
