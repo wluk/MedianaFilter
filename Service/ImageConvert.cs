@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-//Biblioteka z neta
-//Accord.Imaging.Converters
-//http://accord-framework.net/docs/html/R_Project_Accord_NET.htm
+/*Biblioteka z internetu Accord.Imaging.Converters
+http://accord-framework.net/docs/html/R_Project_Accord_NET.htm
+*/
 using Accord.Imaging.Converters;
 
 namespace Service
@@ -21,7 +21,7 @@ namespace Service
     public class ImageConvert
     {
         /// <summary>
-        /// Przetworzenie macierzy do bitmap
+        /// Przetworzenie macierzy do Bitmap
         /// </summary>
         /// <param name="rawImage">Macierz obrazu</param>
         /// <returns>Bitmapa z obrazem</returns>
@@ -37,7 +37,7 @@ namespace Service
         }
 
         /// <summary>
-        /// Metoda konwertująca obraz na bmp a następnie do macierzy
+        /// Metoda konwertująca obraz do bmp a następnie na macierz
         /// </summary>
         /// <param name="localPath">Ścieżka do pliku</param>
         /// <returns>Macierz pixeli</returns>

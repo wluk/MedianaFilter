@@ -30,8 +30,8 @@ C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.Properties.Resources
 C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.csproj.GenerateResource.Cache
 C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.exe
 C:\Users\wluka\Source\Repos\MedianaFilter\GUI\obj\Debug\GUI.pdb
-C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe.config
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\Accord.dll.config
+C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe.config
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.exe
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\GUI.pdb
 C:\Users\wilu\Source\Repos\MedianaFilter\GUI\bin\Debug\MahApps.Metro.dll
