@@ -90,7 +90,7 @@ namespace GUI
         /// <param name="e"></param>
         private void btnFilterSeq_Click(object sender, RoutedEventArgs e)
         {
-            var swSeq = Stopwatch.StartNew();
+            var swSeq = new Stopwatch();
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
 
             try
@@ -101,7 +101,9 @@ namespace GUI
                 _medianaFilter = new MedianaFilter(imageMatrix);
 
                 //Odfiltrowanie obrazu
+                swSeq.Start();
                 var filteredArrayImage = _medianaFilter.SequenceFiltration(filterSize);
+                swSeq.Stop();
 
                 //Utworzenie obrazu z macierzy pikseli
                 var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
@@ -111,12 +113,12 @@ namespace GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            swSeq.Stop();
+            
             OneThredCount = (int)swSeq.ElapsedMilliseconds;
-            TimeSeq.Content = "Czas filtrowania sekwencyjnego " + swSeq.ElapsedMilliseconds + "ms";
+            TimeSeq.Content = "Czas filtrowania sekwencyjnego " + OneThredCount + "ms";
             ProgresCheck();
         }
 
@@ -127,7 +129,7 @@ namespace GUI
         /// <param name="e"></param>
         private void btnFilterSync_Click(object sender, RoutedEventArgs e)
         {
-            var swSync = Stopwatch.StartNew();
+            var swSync = new Stopwatch();
             int filterSize = Convert.ToInt32(sizeMatrix.Text);
             int threadCount = Convert.ToInt32(countThread.Text);
 
@@ -139,7 +141,9 @@ namespace GUI
                 _medianaFilter = new MedianaFilter(imageMatrix);
 
                 //Odfiltrowanie obrazu
+                swSync.Start();
                 var filteredArrayImage = _medianaFilter.AsyncFilter(filterSize, threadCount);
+                swSync.Stop();
 
                 //Utworzenie obrazu z macierzy pikseli
                 var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
@@ -149,12 +153,12 @@ namespace GUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            swSync.Stop();
+            
             MultiThreadCount = (int)swSync.ElapsedMilliseconds;
-            TimeSync.Content = "Czas filtrowania wielowatkowego " + swSync.ElapsedMilliseconds + "ms";
+            TimeSync.Content = "Czas filtrowania wielowatkowego " + MultiThreadCount + "ms";
             ProgresCheck();
         }
 
@@ -243,6 +247,9 @@ namespace GUI
 
                 OneThread.Value = OneThredCount;
                 MultiThread.Value = MultiThreadCount;
+
+                KeyOneThread.Text = " " + OneThredCount.ToString()+" ms";
+                KeyMultiThread.Text = " " + MultiThreadCount.ToString()+" ms";
             }
         }
     }

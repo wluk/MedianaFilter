@@ -12,7 +12,7 @@ namespace Service
         /// <summary>
         /// Rozmiar ramki filtrującej
         /// </summary>
-        public int FrameFilterSize { get; set; }
+        public int filterSize { get; set; }
         /// <summary>
         /// Obraz do filtracji
         /// </summary>
@@ -78,7 +78,7 @@ namespace Service
                     //Część dolna
                     var current = new ArrayInfo
                     {
-                        StartIndex = DimensionX - 1 - partCount,
+                        StartIndex = partCount - 1,
                         EndIndex = DimensionX - 1,
                         Part = Part.Last
                     };
@@ -123,19 +123,29 @@ namespace Service
                 p =>
             {
                 double[,] imagePart = DivArray(p);
-                p.PartOfImage = Filtrowanie(filterSize, imagePart);
+                p.PartOfImage = imagePart;
+                //Filtrowanie(filterSize, imagePart);
             }
             );
             Task.WaitAny();
-            //threads.LastOrDefault().Join();
-            ProcessedImageAsync = Image;
+            ////threads.LastOrDefault().Join();
+            //ProcessedImageAsync = Image;
+            ProcessedImageAsync = new double[DimensionX, DimensionY];
+            for (int i = 0; i < DimensionX; i++)
+            {
+                for (int j = 0; j < DimensionY; j++)
+                {
+                    ProcessedImageAsync[i, j] = 0;
+                }
+            }
 
             foreach (var p in parts)
             {
+
                 if (p.Part != Part.First)
-                    Merge(p.StartIndex + 1, p.EndIndex - 1, p, p.StartIndex - 1);
+                    Merge(p.StartIndex-1, p.EndIndex, p, 0);
                 else
-                    Merge(p.StartIndex + 1, p.EndIndex - 1, p, -1);
+                    Merge(p.StartIndex, p.EndIndex-1, p, 0);
             }
 
             return ProcessedImageAsync;
@@ -145,9 +155,9 @@ namespace Service
         {
             for (int i = startIndex; i <= endIndex; i++)
             {
-                for (int j = 1; j < DimensionY - 1; j++)
+                for (int j = 0; j < DimensionY - 1; j++)
                 {
-                    ProcessedImageAsync[i, j] = imagePart.PartOfImage[i - (alignment + 1), j];
+                    ProcessedImageAsync[i, j] = imagePart.PartOfImage[i, j];
                 }
             }
 
@@ -215,7 +225,7 @@ namespace Service
 
         private double[,] Filtrowanie(int filterSize, double[,] imageArray)
         {
-            FrameFilterSize = filterSize;
+            this.filterSize = filterSize;
             var result = new double[imageArray.GetLength(0), imageArray.GetLength(1)];
             //Utworzenie macierzy z median dla zadanej macierzy obrazu
             for (int i = 0; i < imageArray.GetLength(0); i++)
@@ -223,22 +233,22 @@ namespace Service
                 for (int j = 0; j < imageArray.GetLength(1); j++)
                 {
                     //Ograniczenie końca macierzy obrazu
-                    if (j <= imageArray.GetLength(1) - FrameFilterSize && i <= imageArray.GetLength(0) - FrameFilterSize)
+                    if (j <= imageArray.GetLength(1) - this.filterSize && i <= imageArray.GetLength(0) - this.filterSize)
                     {
                         //FrameingSeq(i, j, i + (FrameFilterSize - FrameFilterSize / 2), j + (FrameFilterSize - FrameFilterSize / 2));
                         var colorElements = new List<double>();
 
-                        for (int k = i; k <= i + (FrameFilterSize - FrameFilterSize / 2); k++)
+                        for (int k = i; k <= i + (this.filterSize - this.filterSize / 2); k++)
                         {
-                            for (int l = j; l <= j + (FrameFilterSize - FrameFilterSize / 2); l++)
+                            for (int l = j; l <= j + (this.filterSize - this.filterSize / 2); l++)
                             {
                                 colorElements.Add(imageArray[k, l]);
                             }
                         }
 
                         var mediana = GetMedian(colorElements);
-                        int a = (i + i + (FrameFilterSize - FrameFilterSize / 2)) / 2;
-                        int b = (j + j + (FrameFilterSize - FrameFilterSize / 2)) / 2;
+                        int a = (i + i + (this.filterSize - this.filterSize / 2)) / 2;
+                        int b = (j + j + (this.filterSize - this.filterSize / 2)) / 2;
                         result[a, b] = mediana;
                     }
                 }
@@ -253,30 +263,15 @@ namespace Service
         /// <returns>Przetworzony obaz w głównym wątku</returns>
         public double[,] SequenceFiltration(int filterSize)
         {
-            FrameFilterSize = filterSize;
-            var t1 = new Thread(Sequence);
-            t1.Start();
-            t1.Join();
+            Sequence();
+            double[,] processedImage = Image;
 
             //Naniesienie macierzy medianowej na obraz
-            double[,] processedImage = new double[DimensionX, DimensionY];
-            for (int i = 0; i < DimensionX; i++)
-            {
-                for (int j = 0; j < DimensionY; j++)
-                {
-                    processedImage[i, j] = 0;
-                }
-            }
-            //Image;
-
             for (int i = 1; i < DimensionX - 1; i++)
             {
                 for (int j = 1; j < DimensionY - 1; j++)
                 {
-                    if (MedianaMatrixSqe[i, j] != -1)
-                    {
-                        processedImage[i, j] = MedianaMatrixSqe[i, j];
-                    }
+                    processedImage[i, j] = MedianaMatrixSqe[i, j];
                 }
             }
 
@@ -289,9 +284,9 @@ namespace Service
             {
                 for (int j = 0; j < DimensionY; j++)
                 {
-                    if (j <= DimensionY - FrameFilterSize && i <= DimensionX - FrameFilterSize)
+                    if (j <= DimensionY - filterSize && i <= DimensionX - filterSize)
                     {
-                        FrameingSeq(i, j, i + (FrameFilterSize - FrameFilterSize / 2), j + (FrameFilterSize - FrameFilterSize / 2));
+                        FrameingSeq(i, j, i + (filterSize - filterSize / 2), j + (filterSize - filterSize / 2));
                     }
                 }
             }
