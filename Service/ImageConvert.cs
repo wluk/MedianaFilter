@@ -33,6 +33,14 @@ namespace Service
 
             var imageBitmapImage = BitmapToBitmapImage(imageBitmap);
 
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(imageBitmapImage));
+
+            using (var fileStream = new System.IO.FileStream(@"C:\Users\wilu\Desktop\Filtr medianowy\file.png", System.IO.FileMode.Create))
+            {
+                encoder.Save(fileStream);
+            }
+
             return imageBitmapImage;
         }
 
