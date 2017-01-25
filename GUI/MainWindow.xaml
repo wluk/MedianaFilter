@@ -20,12 +20,8 @@ ShowTitleBar="True"
         </Grid.ColumnDefinitions>
 
         <Image Margin="10,10,5,10" Name="imgBase" Stretch="Fill" Grid.Column="0"/>
-        <Border BorderThickness="1"
-        BorderBrush="#FF000000"
-        VerticalAlignment="Top" Grid.Column="1">
-            <Image Margin="5,10,5,10"  Name="imgFilter" Stretch="Fill" Grid.Column="1"/>
-        </Border>
-        <GroupBox x:Name="groupFilter" Header="Filtr medianowy" HorizontalAlignment="Left" Height="auto" Margin="5,10,10,0" Grid.Row="1" VerticalAlignment="Top" Width="auto" Grid.Column="2" FontWeight="Bold">
+        <Image Margin="5,10,5,10"  Name="imgFilter" Stretch="Fill" Grid.Column="1"/>
+            <GroupBox x:Name="groupFilter" Header="Filtr medianowy" HorizontalAlignment="Left" Height="auto" Margin="5,10,10,0" Grid.Row="1" VerticalAlignment="Top" Width="auto" Grid.Column="2" FontWeight="Bold">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
@@ -71,7 +67,6 @@ ShowTitleBar="True"
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Button x:Name="btnFilterSync" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Center" Width="75" Click="btnFilterSync_Click" IsEnabled="False" Grid.Column="0">F_iltruj</Button>
-                                <Button x:Name="btnShowDiv" Height="30" HorizontalAlignment="Left" Margin="0,20,0,0"  VerticalAlignment="Center" Width="75" Click="btnShowDiv_Click" IsEnabled="False" Grid.Column="1">P_odział</Button>
                             </Grid>
                             <Label Name="TimeSync" Content="" Margin="-5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="auto"/>
                         </StackPanel>

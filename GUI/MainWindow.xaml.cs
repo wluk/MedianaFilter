@@ -60,26 +60,22 @@ namespace GUI
                          "Portable Network Graphic (*.png)|*.png"
             };
 
-            if (op.ShowDialog() == true)
+            if (op.ShowDialog() != true) return;
+            try
             {
-                try
-                {
-                    _inputImage = new BitmapImage(new Uri(op.FileName));
-                    imgBase.Source = _inputImage;
-                    imgFilter.Source = null;
+                _inputImage = new BitmapImage(new Uri(op.FileName));
+                imgBase.Source = _inputImage;
+                imgFilter.Source = null;
 
-                    btnFilter.IsEnabled = true;
-                    btnFilterSync.IsEnabled = true;
-                    btnShowDiv.IsEnabled = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
+                btnFilter.IsEnabled = true;
+                btnFilterSync.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
 
-                    btnFilter.IsEnabled = false;
-                    btnFilterSync.IsEnabled = false;
-                    btnShowDiv.IsEnabled = false;
-                }
+                btnFilter.IsEnabled = false;
+                btnFilterSync.IsEnabled = false;
             }
         }
 
@@ -181,7 +177,7 @@ namespace GUI
         private void btnMinusThread_Click(object sender, RoutedEventArgs e)
         {
             int minusCountThread = Convert.ToInt32(countThread.Text) - 1;
-            countThread.Text = minusCountThread < 1 ? "1" : minusCountThread.ToString();
+            countThread.Text = minusCountThread < 2 ? "2" : minusCountThread.ToString();
         }
 
         private void btnPlusThread_Click(object sender, RoutedEventArgs e)
@@ -194,39 +190,7 @@ namespace GUI
             var regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-
-        /// <summary>
-        /// Funkcjonalność testowa
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnShowDiv_Click(object sender, RoutedEventArgs e)
-        {
-            //int filterSize = Convert.ToInt32(sizeMatrix.Text);
-            //int threadCount = Convert.ToInt32(countThread.Text);
-
-            //try
-            //{
-            //    //Image to array
-            //    var imageMatrix = _imageConvert.GetPixelArray(_inputImage.UriSource.LocalPath);
-
-            //    _medianaFilter = new MedianaFilter(imageMatrix);
-
-            //    //Odfiltrowanie obrazu
-            //    var filteredArrayImage = _medianaFilter.FilterShow(threadCount, filterSize);
-
-            //    //Array to image
-            //    var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
-
-
-            //    imgFilter.Source = filteredImage;
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
-        }
-
+        
         private void ProgresCheck()
         {
             if (OneThredCount != 0 && MultiThreadCount != 0)

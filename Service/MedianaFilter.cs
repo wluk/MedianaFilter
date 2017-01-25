@@ -30,10 +30,9 @@ namespace Service
         /// </summary>
         public int DimensionY => Image.GetLength(1);
         /// <summary>
-        /// 
+        /// Obraz po filtracji
         /// </summary>
         public double[,] ProcessedImageAsync { get; set; }
-
 
         public MedianaFilter(double[,] imageMatrix)
         {
@@ -51,15 +50,16 @@ namespace Service
         /// <summary>
         /// Filtrowanie na wątkach
         /// </summary>
-        /// <param name="filterSize">Rozmiar kratki filtrującej</param>
+        /// <param name="filter">Rozmiar kratki filtrującej</param>
         /// <param name="countThread">Liczba wątków</param>
         /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego na wątkach</returns>
-        public double[,] AsyncFilter(int filterSize, int countThread)
+        public double[,] AsyncFilter(int filter, int countThread)
         {
-            this.filterSize = filterSize;
+            filterSize = filter;
             var partCount = DimensionX / countThread + 1;
             var parts = new List<ArrayInfo>();
 
+            //Części na obraz
             parts.Add(new ArrayInfo()
             {
                 StartIndex = 0,
@@ -87,13 +87,26 @@ namespace Service
 
             ProcessedImageAsync = Image;
 
-
+            //Wykonanie filtracji
+            List<Thread> threads = new List<Thread>();
             foreach (var sector in parts)
             {
-                sector.PartOfImage = DivArray(sector);
-                sector.PartOfImage = Filtrowanie(sector.PartOfImage);
+                Thread t = new Thread(() =>
+                {
+                    sector.PartOfImage = Filtrowanie(DivArray(sector));
+                });
+
+                t.IsBackground = true;
+                threads.Add(t);
+                t.Start();
             }
-            //Merge
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
+
+            //Złączenie części obrazu
             foreach (var sector in parts)
             {
                 Merge(sector.StartIndex + 1, sector.PartOfImage);
@@ -108,7 +121,10 @@ namespace Service
             {
                 for (int j = 1; j < DimensionY - 1; j++)
                 {
-                    ProcessedImageAsync[i + startIndex - 1, j] = imagePart[i, j];
+                    if (imagePart[i, j] != -1)
+                    {
+                        ProcessedImageAsync[i + startIndex - 1, j] = imagePart[i, j];
+                    }
                 }
             }
         }
@@ -116,6 +132,13 @@ namespace Service
         private double[,] Filtrowanie(double[,] imageArray)
         {
             var result = new double[imageArray.GetLength(0), imageArray.GetLength(1)];
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    result[i, j] = -1;
+                }
+            }
 
             //Utworzenie macierzy z median dla zadanej macierzy obrazu
             for (int i = 0; i < imageArray.GetLength(0); i++)
@@ -123,22 +146,21 @@ namespace Service
                 for (int j = 0; j < imageArray.GetLength(1); j++)
                 {
                     //Ograniczenie końca macierzy obrazu
-                    if (j <= imageArray.GetLength(1) - this.filterSize && i <= imageArray.GetLength(0) - this.filterSize)
+                    if (j <= imageArray.GetLength(1) - filterSize && i <= imageArray.GetLength(0) - filterSize)
                     {
-                        //FrameingSeq(i, j, i + (FrameFilterSize - FrameFilterSize / 2), j + (FrameFilterSize - FrameFilterSize / 2));
                         var colorElements = new List<double>();
 
-                        for (int k = i; k <= i + (this.filterSize - this.filterSize / 2); k++)
+                        for (int k = i; k <= i + (filterSize - filterSize / 2); k++)
                         {
-                            for (int l = j; l <= j + (this.filterSize - this.filterSize / 2); l++)
+                            for (int l = j; l <= j + (filterSize - filterSize / 2); l++)
                             {
                                 colorElements.Add(imageArray[k, l]);
                             }
                         }
 
                         var mediana = GetMedian(colorElements);
-                        int a = (i + i + (this.filterSize - this.filterSize / 2)) / 2;
-                        int b = (j + j + (this.filterSize - this.filterSize / 2)) / 2;
+                        int a = (i + i + (filterSize - filterSize / 2)) / 2;
+                        int b = (j + j + (filterSize - filterSize / 2)) / 2;
                         result[a, b] = mediana;
                     }
                 }
@@ -149,11 +171,11 @@ namespace Service
         /// <summary>
         /// Filtrowanie obrazu na jednym wątku
         /// </summary>
-        /// <param name="filterSize">Rozmiar okna próbkującego</param>
+        /// <param name="filter">Rozmiar okna próbkującego</param>
         /// <returns>Przetworzony obaz w głównym wątku</returns>
-        public double[,] SequenceFiltration(int filterSize)
+        public double[,] SequenceFiltration(int filter)
         {
-            this.filterSize = filterSize;
+            filterSize = filter;
             Sequence();
             double[,] processedImage = Image;
 
@@ -162,7 +184,10 @@ namespace Service
             {
                 for (int j = 1; j < DimensionY - 1; j++)
                 {
-                    processedImage[i, j] = MedianaMatrixSqe[i, j];
+                    if (MedianaMatrixSqe[i, j] != -1)
+                    {
+                        processedImage[i, j] = MedianaMatrixSqe[i, j];
+                    }
                 }
             }
 
@@ -207,27 +232,6 @@ namespace Service
             int b = (startY + stopY) / 2;
             MedianaMatrixSqe[a, b] = mediana;
         }
-        /*
-                private double[,] FrameingSync(int startX, int stopX)
-                {
-                    List<double> colorElements = new List<double>();
-                    var result = new double[stopX - startX, DimensionY];
-                    for (int i = startX; i <= stopX; i++)
-                    {
-                        for (int j = 0; j <= DimensionY; j++)
-                        {
-                            colorElements.Add(Image[i, j]);
-                        }
-                    }
-
-                    var mediana = GetMedian(colorElements);
-                    int a = (startX + stopX) / 2;
-                    int b = (0 + DimensionY) / 2;
-                    result[a, b] = mediana;
-
-                    return result;
-                }
-        */
 
         /// <summary>
         /// Mediana ze zbioru
@@ -256,25 +260,6 @@ namespace Service
             return temp[count / 2];
         }
 
-        /*
-                private static List<string[,]> _processedArray = new List<string[,]>();
-        */
-
-        /*
-                private static string[,] InThread(int a, int b)
-                {
-                    var newArray = new string[b - a, 520];
-                    for (int i = 0; i < b - a; i++)
-                    {
-                        for (int j = 0; j < newArray.GetLength(1); j++)
-                        {
-                            newArray[i, j] = Thread.CurrentThread.Name;
-                        }
-                    }
-                    return newArray;
-                }
-        */
-
         private double[,] CreatePartTab(int x)
         {
             return new double[x, DimensionY];
@@ -301,13 +286,5 @@ namespace Service
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
         public double[,] PartOfImage { get; set; }
-        public Part Part { get; set; }
-    }
-
-    internal enum Part
-    {
-        First,
-        Middle,
-        Last
     }
 }

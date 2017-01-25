@@ -24,7 +24,7 @@ namespace Service
         /// Przetworzenie macierzy do Bitmap
         /// </summary>
         /// <param name="rawImage">Macierz obrazu</param>
-        /// <returns>Bitmapa z obrazem</returns>
+        /// <returns>Bitmap z obrazem</returns>
         public BitmapSource ArrayToBitmapImage(double[,] rawImage)
         {
             Bitmap imageBitmap;
@@ -36,7 +36,8 @@ namespace Service
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(imageBitmapImage));
 
-            using (var fileStream = new System.IO.FileStream(@"C:\Users\wilu\Desktop\Filtr medianowy\file.png", System.IO.FileMode.Create))
+            //Testowy zapis pliku wynikowego
+            using (var fileStream = new FileStream(@"C:\Users\wilu\Desktop\Filtr medianowy\file.png", FileMode.Create))
             {
                 encoder.Save(fileStream);
             }
@@ -45,7 +46,7 @@ namespace Service
         }
 
         /// <summary>
-        /// Metoda konwertująca obraz do bmp a następnie na macierz
+        /// Metoda konwertująca obraz do Bitmap, a następnie na macierz
         /// </summary>
         /// <param name="localPath">Ścieżka do pliku</param>
         /// <returns>Macierz pixeli</returns>
