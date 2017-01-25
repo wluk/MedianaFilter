@@ -56,89 +56,65 @@ namespace Service
         /// <returns>Macierz (obraz) po zastosowaniu filtru medianowego na wątkach</returns>
         public double[,] AsyncFilter(int filterSize, int countThread)
         {
+            this.filterSize = filterSize;
             var partCount = DimensionX / countThread + 1;
             var parts = new List<ArrayInfo>();
 
-            //Podział obrazu na części
-            for (int i = 0; i < countThread; i++)
+            parts.Add(new ArrayInfo()
             {
-                if (i == 0)
-                {
-                    parts.Add(
-                    new ArrayInfo()
+                StartIndex = 0,
+                EndIndex = partCount,
+                PartOfImage = CreatePartTab(partCount + 1)
+            });
+            for (int i = 1; i < countThread; i++)
+            {
+                var y = parts.LastOrDefault().EndIndex - 1;
+                if (i != countThread - 1)
+                    parts.Add(new ArrayInfo()
                     {
-                        StartIndex = i * partCount,
-                        EndIndex = partCount * (i + 1),
-                        Part = Part.First
-                    }
-                );
-                }
-                else if (i == countThread - 1)
-                {
-                    parts.Add(
-                    new ArrayInfo()
-                    {
-                        StartIndex = i * partCount - 1,
-                        EndIndex = DimensionX,
-                        Part = Part.Last
-                    }
-                );
-                }
+                        StartIndex = y,
+                        EndIndex = y + partCount,
+                        PartOfImage = CreatePartTab(parts.LastOrDefault().EndIndex + partCount - y)
+                    });
                 else
-                {
-                    parts.Add(
-                        new ArrayInfo()
-                        {
-                            StartIndex = i * partCount - 1,
-                            EndIndex = partCount * (1 + i),
-                            Part = Part.Middle
-                        }
-                    );
-                }
+                    parts.Add(new ArrayInfo()
+                    {
+                        StartIndex = y,
+                        EndIndex = DimensionX,
+                        PartOfImage = CreatePartTab(DimensionX - y)
+                    });
             }
-            foreach (var arrayInfo in parts)
+
+            ProcessedImageAsync = Image;
+
+
+            foreach (var sector in parts)
             {
-                arrayInfo.PartOfImage = DivArray(arrayInfo);
+                sector.PartOfImage = DivArray(sector);
+                sector.PartOfImage = Filtrowanie(sector.PartOfImage);
             }
-
-            ProcessedImageAsync = new double[DimensionX,DimensionY];
-
-            foreach (var p in parts)
+            //Merge
+            foreach (var sector in parts)
             {
-                switch (p.Part)
-                {
-                    case Part.First:
-                        Merge(p.StartIndex, p.EndIndex - 1, p.PartOfImage);
-                        break;
-                    case Part.Middle:
-                        Merge(p.StartIndex + 1, p.EndIndex - 1, p.PartOfImage);
-                        break;
-                    case Part.Last:
-                        Merge(p.StartIndex + 1, p.EndIndex-1, p.PartOfImage);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                Merge(sector.StartIndex + 1, sector.PartOfImage);
             }
-
 
             return ProcessedImageAsync;
         }
 
-        private void Merge(int startIndex, int endIndex, double[,] imagePart)
+        private void Merge(int startIndex, double[,] imagePart)
         {
-            for (int i = 1; i <= endIndex - startIndex; i++)
+            for (int i = 1; i < imagePart.GetLength(0) - 1; i++)
             {
                 for (int j = 1; j < DimensionY - 1; j++)
                 {
-                    ProcessedImageAsync[i + startIndex, j] = imagePart[i, j];
+                    ProcessedImageAsync[i + startIndex - 1, j] = imagePart[i, j];
                 }
             }
         }
 
-        private double[,] Filtrowanie(int filterSize, double[,] imageArray)
+        private double[,] Filtrowanie(double[,] imageArray)
         {
-            this.filterSize = filterSize;
             var result = new double[imageArray.GetLength(0), imageArray.GetLength(1)];
 
             //Utworzenie macierzy z median dla zadanej macierzy obrazu
@@ -177,6 +153,7 @@ namespace Service
         /// <returns>Przetworzony obaz w głównym wątku</returns>
         public double[,] SequenceFiltration(int filterSize)
         {
+            this.filterSize = filterSize;
             Sequence();
             double[,] processedImage = Image;
 
@@ -298,19 +275,24 @@ namespace Service
                 }
         */
 
+        private double[,] CreatePartTab(int x)
+        {
+            return new double[x, DimensionY];
+        }
+
         private double[,] DivArray(ArrayInfo part)
         {
-            var array = new double[part.EndIndex + 1 - part.StartIndex, DimensionY];
+            var result = part.PartOfImage;
 
-            for (int i = 0; i <= part.EndIndex - part.StartIndex; i++)
+            for (int i = 0; i < part.PartOfImage.GetLength(0); i++)
             {
                 for (int j = 0; j < DimensionY; j++)
                 {
-                    array[i, j] = Image[i + part.StartIndex, j];
+                    result[i, j] = Image[i + part.StartIndex, j];
                 }
             }
 
-            return array;
+            return result;
         }
     }
 
