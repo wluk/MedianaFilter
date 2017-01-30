@@ -1,26 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Drawing;
-using System.IO;
 using Service;
 using MahApps.Metro.Controls;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-
 
 namespace GUI
 {
@@ -64,18 +50,27 @@ namespace GUI
             try
             {
                 _inputImage = new BitmapImage(new Uri(op.FileName));
-                imgBase.Source = _inputImage;
-                imgFilter.Source = null;
+                ImgBase.Source = _inputImage;
+                ImgFilter.Source = null;
 
-                btnFilter.IsEnabled = true;
-                btnFilterSync.IsEnabled = true;
+                TimeSeq.Content = string.Empty;
+                TimeSync.Content = string.Empty;
+                OneThread.Visibility = Visibility.Hidden;
+                MultiThread.Visibility = Visibility.Hidden;
+                KeyOneThread.Text = string.Empty;
+                KeyMultiThread.Text = string.Empty;
+                OneThredCount = 0;
+                MultiThreadCount = 0;
+
+                BtnFilter.IsEnabled = true;
+                BtnFilterSync.IsEnabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Błąd podczas ładowania obrazu", MessageBoxButton.OK, MessageBoxImage.Error);
 
-                btnFilter.IsEnabled = false;
-                btnFilterSync.IsEnabled = false;
+                BtnFilter.IsEnabled = false;
+                BtnFilterSync.IsEnabled = false;
             }
         }
 
@@ -87,7 +82,7 @@ namespace GUI
         private void btnFilterSeq_Click(object sender, RoutedEventArgs e)
         {
             var swSeq = new Stopwatch();
-            int filterSize = Convert.ToInt32(sizeMatrix.Text);
+            int filterSize = Convert.ToInt32(SizeMatrix.Text);
 
             try
             {
@@ -104,30 +99,28 @@ namespace GUI
                 //Utworzenie obrazu z macierzy pikseli
                 var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
 
-
-                imgFilter.Source = filteredImage;
+                ImgFilter.Source = filteredImage;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            
             OneThredCount = (int)swSeq.ElapsedMilliseconds;
             TimeSeq.Content = "Czas filtrowania sekwencyjnego " + OneThredCount + "ms";
             ProgresCheck();
         }
 
         /// <summary>
-        /// Uruchomienie filtrowania współbieżnie
+        /// Uruchomienie filtrowania współbieznego
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnFilterSync_Click(object sender, RoutedEventArgs e)
         {
             var swSync = new Stopwatch();
-            int filterSize = Convert.ToInt32(sizeMatrix.Text);
-            int threadCount = Convert.ToInt32(countThread.Text);
+            int filterSize = Convert.ToInt32(SizeMatrix.Text);
+            int threadCount = Convert.ToInt32(CountThread.Text);
 
             try
             {
@@ -144,15 +137,13 @@ namespace GUI
                 //Utworzenie obrazu z macierzy pikseli
                 var filteredImage = _imageConvert.ArrayToBitmapImage(filteredArrayImage);
 
-
-                imgFilter.Source = filteredImage;
+                ImgFilter.Source = filteredImage;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            
             MultiThreadCount = (int)swSync.ElapsedMilliseconds;
             TimeSync.Content = "Czas filtrowania wielowatkowego " + MultiThreadCount + "ms";
             ProgresCheck();
@@ -165,24 +156,24 @@ namespace GUI
 
         private void btnMinusSize_Click(object sender, RoutedEventArgs e)
         {
-            int minusFilterSize = Convert.ToInt32(sizeMatrix.Text) - 3;
-            sizeMatrix.Text = minusFilterSize < 3 ? "3" : minusFilterSize.ToString();
+            int minusFilterSize = Convert.ToInt32(SizeMatrix.Text) - 3;
+            SizeMatrix.Text = minusFilterSize < 3 ? "3" : minusFilterSize.ToString();
         }
 
         private void btnPlusSize_Click(object sender, RoutedEventArgs e)
         {
-            sizeMatrix.Text = (Convert.ToInt32(sizeMatrix.Text) + 2).ToString();
+            SizeMatrix.Text = (Convert.ToInt32(SizeMatrix.Text) + 2).ToString();
         }
 
         private void btnMinusThread_Click(object sender, RoutedEventArgs e)
         {
-            int minusCountThread = Convert.ToInt32(countThread.Text) - 1;
-            countThread.Text = minusCountThread < 2 ? "2" : minusCountThread.ToString();
+            int minusCountThread = Convert.ToInt32(CountThread.Text) - 1;
+            CountThread.Text = minusCountThread < 2 ? "2" : minusCountThread.ToString();
         }
 
         private void btnPlusThread_Click(object sender, RoutedEventArgs e)
         {
-            countThread.Text = (Convert.ToInt32(countThread.Text) + 1).ToString();
+            CountThread.Text = (Convert.ToInt32(CountThread.Text) + 1).ToString();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -190,7 +181,7 @@ namespace GUI
             var regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-        
+
         private void ProgresCheck()
         {
             if (OneThredCount != 0 && MultiThreadCount != 0)
@@ -212,8 +203,8 @@ namespace GUI
                 OneThread.Value = OneThredCount;
                 MultiThread.Value = MultiThreadCount;
 
-                KeyOneThread.Text = " " + OneThredCount.ToString()+" ms";
-                KeyMultiThread.Text = " " + MultiThreadCount.ToString()+" ms";
+                KeyOneThread.Text = " " + OneThredCount.ToString() + " ms";
+                KeyMultiThread.Text = " " + MultiThreadCount.ToString() + " ms";
             }
         }
     }

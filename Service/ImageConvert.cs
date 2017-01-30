@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 /*Biblioteka z internetu Accord.Imaging.Converters
 http://accord-framework.net/docs/html/R_Project_Accord_NET.htm
@@ -37,10 +30,10 @@ namespace Service
             encoder.Frames.Add(BitmapFrame.Create(imageBitmapImage));
 
             //Testowy zapis pliku wynikowego
-            using (var fileStream = new FileStream(@"C:\Users\wilu\Desktop\Filtr medianowy\file.png", FileMode.Create))
-            {
-                encoder.Save(fileStream);
-            }
+            //using (var fileStream = new FileStream(@"C:\Users\wilu\Desktop\Filtr medianowy\file.png", FileMode.Create))
+            //{
+            //    encoder.Save(fileStream);
+            //}
 
             return imageBitmapImage;
         }
